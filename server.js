@@ -11,11 +11,22 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: 'https://payment-platform-pink.vercel.app', // only allow this domain
+    credentials: true,
+  })
+);
+
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+
+app.use((req, res, next) => {
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  next();
+});
 
 // Paystack configuration
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY;

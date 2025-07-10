@@ -342,6 +342,7 @@
           try {
             const response = await fetch('/api/initialize-payment', {
               method: 'POST',
+              mode: 'cors',
               headers: {
                 'Content-Type': 'application/json',
               },
