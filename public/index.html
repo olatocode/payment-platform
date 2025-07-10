@@ -339,12 +339,8 @@
           payButton.disabled = true;
           payButton.textContent = 'Processing...';
 
-          const baseUrl = process.env.NODE_ENV === 'production'
-         ? 'https://payment-platform-pink.vercel.app'
-          : 'http://localhost:3000';
-
           try {
-            const response = await fetch(`${baseUrl}/api/initialize-payment`, {
+            const response = await fetch('/api/initialize-payment', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
