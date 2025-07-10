@@ -16,7 +16,6 @@ app.use(express.static('public'));
 
 // Paystack configuration
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY;
-const PAYSTACK_PUBLIC_KEY = process.env.PAYSTACK_PUBLIC_KEY;
 
 if (!PAYSTACK_SECRET_KEY) {
   console.error('PAYSTACK_SECRET_KEY is required');
@@ -140,7 +139,7 @@ app.get('/api/transactions', async (req, res) => {
 
 // Webhook endpoint for Paystack
 app.post('/api/webhook', (req, res) => {
-  const secret = process.env.PAYSTACK_WEBHOOK_SECRET;
+  const secret = process.env.PAYSTACK_SECRET_KEY;
   const hash = crypto
     .createHmac('sha512', secret)
     .update(JSON.stringify(req.body))
