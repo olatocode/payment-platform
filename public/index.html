@@ -329,7 +329,7 @@
                 if (data.status) {
                     // Use Paystack Popup
                     const handler = PaystackPop.setup({
-                        key: PAYSTACK_PUBLIC_KEY,
+                        key: PAYSTACK_SECRET_KEY,
                         email: email,
                         amount: amount * 100,
                         currency: currency,
