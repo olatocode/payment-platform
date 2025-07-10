@@ -1,463 +1,555 @@
+<!-- @format -->
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Paystack Payment Platform</title>
     <script src="https://js.paystack.co/v1/inline.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
 
-        .header {
-            background: linear-gradient(135deg, #00d4ff 0%, #090979 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
+      .header {
+        background: linear-gradient(135deg, #00d4ff 0%, #090979 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+      }
+
+      .header p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+
+      .main-content {
+        padding: 40px;
+      }
+
+      .section {
+        margin-bottom: 40px;
+        padding: 30px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        border-left: 4px solid #00d4ff;
+      }
+
+      .section h2 {
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 1.8rem;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+        color: #555;
+      }
+
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: #00d4ff;
+      }
+
+      .btn {
+        background: linear-gradient(135deg, #00d4ff 0%, #090979 100%);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .btn-secondary {
+        background: #6c757d;
+        margin-left: 10px;
+      }
+
+      .alert {
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-weight: 500;
+      }
+
+      .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+
+      .alert-error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+
+      .alert-info {
+        background: #cce7ff;
+        color: #004085;
+        border: 1px solid #b8daff;
+      }
+
+      .transaction-item {
+        background: white;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 15px;
+        transition: transform 0.3s ease;
+      }
+
+      .transaction-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .transaction-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .transaction-amount {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #28a745;
+      }
+
+      .transaction-status {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .status-success {
+        background: #d4edda;
+        color: #155724;
+      }
+
+      .status-failed {
+        background: #f8d7da;
+        color: #721c24;
+      }
+
+      .status-pending {
+        background: #fff3cd;
+        color: #856404;
+      }
+
+      .loading {
+        text-align: center;
+        padding: 20px;
+      }
+
+      .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #00d4ff;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 10px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      @media (max-width: 768px) {
+        .grid {
+          grid-template-columns: 1fr;
         }
 
         .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
+          font-size: 2rem;
         }
 
         .main-content {
-            padding: 40px;
+          padding: 20px;
         }
-
-        .section {
-            margin-bottom: 40px;
-            padding: 30px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border-left: 4px solid #00d4ff;
-        }
-
-        .section h2 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #555;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #00d4ff;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #00d4ff 0%, #090979 100%);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-secondary {
-            background: #6c757d;
-            margin-left: 10px;
-        }
-
-        .alert {
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
-
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .alert-info {
-            background: #cce7ff;
-            color: #004085;
-            border: 1px solid #b8daff;
-        }
-
-        .transaction-item {
-            background: white;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 15px;
-            transition: transform 0.3s ease;
-        }
-
-        .transaction-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .transaction-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .transaction-amount {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #28a745;
-        }
-
-        .transaction-status {
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .status-success {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .status-failed {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .status-pending {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 20px;
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #00d4ff;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        @media (max-width: 768px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .main-content {
-                padding: 20px;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <div class="header">
-            <h1>🚀 Paystack Payment Platform</h1>
-            <p>Secure payments powered by Paystack API</p>
+      <div class="header">
+        <h1>🚀 Paystack Payment Platform</h1>
+        <p>Secure payments powered by Paystack API</p>
+      </div>
+
+      <div class="main-content">
+        <div class="grid">
+          <!-- Payment Section -->
+          <div class="section">
+            <h2>💳 Make Payment</h2>
+            <div id="paymentAlert"></div>
+            <form id="paymentForm">
+              <div class="form-group">
+                <label for="customerEmail">Email Address</label>
+                <input
+                  type="email"
+                  id="customerEmail"
+                  required
+                  placeholder="customer@example.com"
+                />
+              </div>
+              <div class="form-group">
+                <label for="amount">Amount (NGN)</label>
+                <input
+                  type="number"
+                  id="amount"
+                  required
+                  min="100"
+                  placeholder="1000"
+                />
+              </div>
+              <div class="form-group">
+                <label for="currency">Currency</label>
+                <select id="currency">
+                  <option value="NGN">Nigerian Naira (NGN)</option>
+                  <option value="USD">US Dollar (USD)</option>
+                  <option value="GHS">Ghana Cedi (GHS)</option>
+                </select>
+              </div>
+              <button type="submit" class="btn" id="payButton">Pay Now</button>
+            </form>
+          </div>
+
+          <!-- Verify Payment Section -->
+          <div class="section">
+            <h2>🔍 Verify Payment</h2>
+            <div id="verifyAlert"></div>
+            <form id="verifyForm">
+              <div class="form-group">
+                <label for="reference">Transaction Reference</label>
+                <input
+                  type="text"
+                  id="reference"
+                  required
+                  placeholder="Enter transaction reference"
+                />
+              </div>
+              <button type="submit" class="btn" id="verifyButton">
+                Verify Payment
+              </button>
+            </form>
+            <div id="verifyResult"></div>
+          </div>
         </div>
 
-        <div class="main-content">
-            <div class="grid">
-                <!-- Payment Section -->
-                <div class="section">
-                    <h2>💳 Make Payment</h2>
-                    <div id="paymentAlert"></div>
-                    <form id="paymentForm">
-                        <div class="form-group">
-                            <label for="customerEmail">Email Address</label>
-                            <input type="email" id="customerEmail" required placeholder="customer@example.com">
-                        </div>
-                        <div class="form-group">
-                            <label for="amount">Amount (NGN)</label>
-                            <input type="number" id="amount" required min="100" placeholder="1000">
-                        </div>
-                        <div class="form-group">
-                            <label for="currency">Currency</label>
-                            <select id="currency">
-                                <option value="NGN">Nigerian Naira (NGN)</option>
-                                <option value="USD">US Dollar (USD)</option>
-                                <option value="GHS">Ghana Cedi (GHS)</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn" id="payButton">
-                            Pay Now
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Verify Payment Section -->
-                <div class="section">
-                    <h2>🔍 Verify Payment</h2>
-                    <div id="verifyAlert"></div>
-                    <form id="verifyForm">
-                        <div class="form-group">
-                            <label for="reference">Transaction Reference</label>
-                            <input type="text" id="reference" required placeholder="Enter transaction reference">
-                        </div>
-                        <button type="submit" class="btn" id="verifyButton">
-                            Verify Payment
-                        </button>
-                    </form>
-                    <div id="verifyResult"></div>
-                </div>
+        <!-- Transactions Section -->
+        <div class="section">
+          <h2>📊 Recent Transactions</h2>
+          <div style="text-align: center; margin-bottom: 20px">
+            <button class="btn" onclick="loadTransactions()">
+              Load Transactions
+            </button>
+          </div>
+          <div id="transactionsContainer">
+            <div class="alert-info alert">
+              Click "Load Transactions" to view recent payments
             </div>
-
-            <!-- Transactions Section -->
-            <div class="section">
-                <h2>📊 Recent Transactions</h2>
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <button class="btn" onclick="loadTransactions()">Load Transactions</button>
-                </div>
-                <div id="transactionsContainer">
-                    <div class="alert-info alert">
-                        Click "Load Transactions" to view recent payments
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
     </div>
 
     <script>
-        // Payment form handling
-        document.getElementById('paymentForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('customerEmail').value;
-            const amount = document.getElementById('amount').value;
-            const currency = document.getElementById('currency').value;
-            const payButton = document.getElementById('payButton');
-            
-            payButton.disabled = true;
-            payButton.textContent = 'Processing...';
-            
-            try {
-                const response = await fetch('/api/initialize-payment', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email, amount, currency })
-                });
-                
-                const data = await response.json();
-                
-                if (data.status) {
-                    // Use Paystack Popup
-                    const handler = PaystackPop.setup({
-                        key: PAYSTACK_SECRET_KEY,
-                        email: email,
-                        amount: amount * 100,
-                        currency: currency,
-                        ref: data.data.reference,
-                        callback: function(response) {
-                            showAlert('paymentAlert', 'Payment successful! Reference: ' + response.reference, 'success');
-                            document.getElementById('reference').value = response.reference;
-                            document.getElementById('paymentForm').reset();
-                        },
-                        onClose: function() {
-                            showAlert('paymentAlert', 'Payment cancelled', 'error');
-                        }
-                    });
-                    handler.openIframe();
-                } else {
-                    showAlert('paymentAlert', data.message || 'Payment initialization failed', 'error');
-                }
-            } catch (error) {
-                showAlert('paymentAlert', 'Network error: ' + error.message, 'error');
-            } finally {
-                payButton.disabled = false;
-                payButton.textContent = 'Pay Now';
+      // Payment form handling
+      document
+        .getElementById('paymentForm')
+        .addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          const email = document.getElementById('customerEmail').value;
+          const amount = document.getElementById('amount').value;
+          const currency = document.getElementById('currency').value;
+          const payButton = document.getElementById('payButton');
+
+          payButton.disabled = true;
+          payButton.textContent = 'Processing...';
+
+          try {
+            const response = await fetch('/api/initialize-payment', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ email, amount, currency }),
+            });
+
+            const data = await response.json();
+
+            if (data.status) {
+              // Use Paystack Popup
+              const handler = PaystackPop.setup({
+                key: 'pk_test_fa05a741ffab19d2895e9fe9ba6f3bda475e652f',
+                email: email,
+                amount: amount * 100,
+                currency: currency,
+                ref: data.data.reference,
+                callback: function (response) {
+                  showAlert(
+                    'paymentAlert',
+                    'Payment successful! Reference: ' + response.reference,
+                    'success'
+                  );
+                  document.getElementById('reference').value =
+                    response.reference;
+                  document.getElementById('paymentForm').reset();
+                },
+                onClose: function () {
+                  showAlert('paymentAlert', 'Payment cancelled', 'error');
+                },
+              });
+              handler.openIframe();
+            } else {
+              showAlert(
+                'paymentAlert',
+                data.message || 'Payment initialization failed',
+                'error'
+              );
             }
+          } catch (error) {
+            showAlert(
+              'paymentAlert',
+              'Network error: ' + error.message,
+              'error'
+            );
+          } finally {
+            payButton.disabled = false;
+            payButton.textContent = 'Pay Now';
+          }
         });
 
-        // Verify payment form handling
-        document.getElementById('verifyForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const reference = document.getElementById('reference').value;
-            const verifyButton = document.getElementById('verifyButton');
-            
-            verifyButton.disabled = true;
-            verifyButton.textContent = 'Verifying...';
-            
-            try {
-                const response = await fetch(`/api/verify-payment/${reference}`);
-                const data = await response.json();
-                
-                if (data.status) {
-                    const transaction = data.data;
-                    const resultHtml = `
+      // Verify payment form handling
+      document
+        .getElementById('verifyForm')
+        .addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          const reference = document.getElementById('reference').value;
+          const verifyButton = document.getElementById('verifyButton');
+
+          verifyButton.disabled = true;
+          verifyButton.textContent = 'Verifying...';
+
+          try {
+            const response = await fetch(`/api/verify-payment/${reference}`);
+            const data = await response.json();
+
+            if (data.status) {
+              const transaction = data.data;
+              const resultHtml = `
                         <div class="transaction-item">
                             <div class="transaction-header">
-                                <span class="transaction-amount">₦${(transaction.amount / 100).toLocaleString()}</span>
-                                <span class="transaction-status status-${transaction.status}">
+                                <span class="transaction-amount">₦${(
+                                  transaction.amount / 100
+                                ).toLocaleString()}</span>
+                                <span class="transaction-status status-${
+                                  transaction.status
+                                }">
                                     ${transaction.status}
                                 </span>
                             </div>
-                            <p><strong>Reference:</strong> ${transaction.reference}</p>
-                            <p><strong>Customer:</strong> ${transaction.customer.email}</p>
-                            <p><strong>Date:</strong> ${new Date(transaction.transaction_date).toLocaleDateString()}</p>
-                            <p><strong>Gateway Response:</strong> ${transaction.gateway_response}</p>
+                            <p><strong>Reference:</strong> ${
+                              transaction.reference
+                            }</p>
+                            <p><strong>Customer:</strong> ${
+                              transaction.customer.email
+                            }</p>
+                            <p><strong>Date:</strong> ${new Date(
+                              transaction.transaction_date
+                            ).toLocaleDateString()}</p>
+                            <p><strong>Gateway Response:</strong> ${
+                              transaction.gateway_response
+                            }</p>
                         </div>
                     `;
-                    document.getElementById('verifyResult').innerHTML = resultHtml;
-                    showAlert('verifyAlert', 'Payment verification successful!', 'success');
-                } else {
-                    showAlert('verifyAlert', data.message || 'Verification failed', 'error');
-                }
-            } catch (error) {
-                showAlert('verifyAlert', 'Network error: ' + error.message, 'error');
-            } finally {
-                verifyButton.disabled = false;
-                verifyButton.textContent = 'Verify Payment';
+              document.getElementById('verifyResult').innerHTML = resultHtml;
+              showAlert(
+                'verifyAlert',
+                'Payment verification successful!',
+                'success'
+              );
+            } else {
+              showAlert(
+                'verifyAlert',
+                data.message || 'Verification failed',
+                'error'
+              );
             }
+          } catch (error) {
+            showAlert(
+              'verifyAlert',
+              'Network error: ' + error.message,
+              'error'
+            );
+          } finally {
+            verifyButton.disabled = false;
+            verifyButton.textContent = 'Verify Payment';
+          }
         });
 
-        // Load transactions
-        async function loadTransactions() {
-            const container = document.getElementById('transactionsContainer');
-            container.innerHTML = '<div class="loading"><div class="spinner"></div>Loading transactions...</div>';
-            
-            try {
-                const response = await fetch('/api/transactions');
-                const data = await response.json();
-                
-                if (data.status && data.data.length > 0) {
-                    const transactionsHtml = data.data.map(transaction => `
+      // Load transactions
+      async function loadTransactions() {
+        const container = document.getElementById('transactionsContainer');
+        container.innerHTML =
+          '<div class="loading"><div class="spinner"></div>Loading transactions...</div>';
+
+        try {
+          const response = await fetch('/api/transactions');
+          const data = await response.json();
+
+          if (data.status && data.data.length > 0) {
+            const transactionsHtml = data.data
+              .map(
+                (transaction) => `
                         <div class="transaction-item">
                             <div class="transaction-header">
-                                <span class="transaction-amount">₦${(transaction.amount / 100).toLocaleString()}</span>
-                                <span class="transaction-status status-${transaction.status}">
+                                <span class="transaction-amount">₦${(
+                                  transaction.amount / 100
+                                ).toLocaleString()}</span>
+                                <span class="transaction-status status-${
+                                  transaction.status
+                                }">
                                     ${transaction.status}
                                 </span>
                             </div>
-                            <p><strong>Reference:</strong> ${transaction.reference}</p>
-                            <p><strong>Customer:</strong> ${transaction.customer.email}</p>
-                            <p><strong>Date:</strong> ${new Date(transaction.transaction_date).toLocaleDateString()}</p>
-                            <p><strong>Channel:</strong> ${transaction.channel}</p>
+                            <p><strong>Reference:</strong> ${
+                              transaction.reference
+                            }</p>
+                            <p><strong>Customer:</strong> ${
+                              transaction.customer.email
+                            }</p>
+                            <p><strong>Date:</strong> ${new Date(
+                              transaction.transaction_date
+                            ).toLocaleDateString()}</p>
+                            <p><strong>Channel:</strong> ${
+                              transaction.channel
+                            }</p>
                         </div>
-                    `).join('');
-                    
-                    container.innerHTML = transactionsHtml;
-                } else {
-                    container.innerHTML = '<div class="alert-info alert">No transactions found</div>';
-                }
-            } catch (error) {
-                container.innerHTML = '<div class="alert-error alert">Error loading transactions: ' + error.message + '</div>';
-            }
-        }
+                    `
+              )
+              .join('');
 
-        // Utility function to show alerts
-        function showAlert(containerId, message, type) {
-            const alertClass = type === 'success' ? 'alert-success' : 'alert-error';
-            document.getElementById(containerId).innerHTML = `
+            container.innerHTML = transactionsHtml;
+          } else {
+            container.innerHTML =
+              '<div class="alert-info alert">No transactions found</div>';
+          }
+        } catch (error) {
+          container.innerHTML =
+            '<div class="alert-error alert">Error loading transactions: ' +
+            error.message +
+            '</div>';
+        }
+      }
+
+      // Utility function to show alerts
+      function showAlert(containerId, message, type) {
+        const alertClass = type === 'success' ? 'alert-success' : 'alert-error';
+        document.getElementById(containerId).innerHTML = `
                 <div class="alert ${alertClass}">${message}</div>
             `;
-            
-            setTimeout(() => {
-                document.getElementById(containerId).innerHTML = '';
-            }, 5000);
-        }
 
-        // Check for payment callback on page load
-        window.addEventListener('load', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const reference = urlParams.get('reference');
-            const status = urlParams.get('status');
-            
-            if (reference && status === 'success') {
-                document.getElementById('reference').value = reference;
-                showAlert('paymentAlert', 'Payment completed! You can verify it below.', 'success');
-                
-                // Clean up URL
-                window.history.replaceState({}, document.title, window.location.pathname);
-            }
-        });
+        setTimeout(() => {
+          document.getElementById(containerId).innerHTML = '';
+        }, 5000);
+      }
+
+      // Check for payment callback on page load
+      window.addEventListener('load', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const reference = urlParams.get('reference');
+        const status = urlParams.get('status');
+
+        if (reference && status === 'success') {
+          document.getElementById('reference').value = reference;
+          showAlert(
+            'paymentAlert',
+            'Payment completed! You can verify it below.',
+            'success'
+          );
+
+          // Clean up URL
+          window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+          );
+        }
+      });
     </script>
-</body>
+  </body>
 </html>
