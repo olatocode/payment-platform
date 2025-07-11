@@ -324,7 +324,7 @@
       </div>
     </div>
 
-    <script>
+    <script nonce="random123">
       // Payment form handling
       document
         .getElementById('paymentForm')
@@ -342,7 +342,6 @@
           try {
             const response = await fetch('/api/initialize-payment', {
               method: 'POST',
-              mode: 'cors',
               headers: {
                 'Content-Type': 'application/json',
               },
@@ -469,8 +468,9 @@
           '<div class="loading"><div class="spinner"></div>Loading transactions...</div>';
 
         try {
-          const response = await fetch('/api/transactions');
+          const response = await fetch('/api/transactions',);
           const data = await response.json();
+          console.log(data);
 
           if (data.status && data.data.length > 0) {
             const transactionsHtml = data.data

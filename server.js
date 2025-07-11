@@ -11,22 +11,26 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
+app.use(cors());
 app.use(
-  cors({
-    origin: 'https://payment-platform-pink.vercel.app', // only allow this domain
-    credentials: true,
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", 'https://js.paystack.co', "'nonce-random123'"],
+        frameSrc: ['https://checkout.paystack.com'],
+      },
+    },
   })
 );
-
-app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-app.use((req, res, next) => {
-  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
-  next();
-});
+// app.use((req, res, next) => {
+//   res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+//   next();
+// });
 
 // Paystack configuration
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY;
@@ -155,7 +159,7 @@ app.get('/api/transactions', async (req, res) => {
 app.post('/api/webhook', (req, res) => {
   const secret = process.env.PAYSTACK_SECRET_KEY;
   const hash = crypto
-    .createHmac('sha512', secret)
+    .createHmac('sha256', secret)
     .update(JSON.stringify(req.body))
     .digest('hex');
 
